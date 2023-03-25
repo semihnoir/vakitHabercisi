@@ -22,16 +22,16 @@ https://arduino.esp8266.com/stable/package_esp8266com_index.json
 
 Gerekli kütüphaneleri kurun.
 
-#include <Arduino.h> <zaten yüklü>
+#include <Arduino.h> zaten yüklü
 
 
 #include <Arduino_JSON.h>
 
 
-#include <ESP8266WiFi.h> <ESP8266 ile birlikte gelir>
+#include <ESP8266WiFi.h> ESP8266 ile birlikte gelir
  
  
-#include <ESP8266HTTPClient.h> <ESP8266 ile birlikte gelir>
+#include <ESP8266HTTPClient.h> ESP8266 ile birlikte gelir
  
  
 #include <NTPClient.h>
@@ -46,7 +46,7 @@ Gerekli kütüphaneleri kurun.
 #include <LiquidCrystal_I2C.h>
  
  
-#include <Wire.h> <ESP8266 ile birlikte gelir>
+#include <Wire.h> ESP8266 ile birlikte gelir
 
 
 Kodu geliştirmek için forklamanız yeterli :)
