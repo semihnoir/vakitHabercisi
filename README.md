@@ -4,7 +4,11 @@
 Kaynaklar:
 
 Referans aldığım kod: https://www.devrelerim.com/2023/01/nodemcu-namaz-vakitlerini-cekme.html
-Arduino buzzer melodileri: https://github.com/robsoncouto/arduino-songs
+
+
+Arduino Buzzer melodileri: https://github.com/robsoncouto/arduino-songs
+
+
 Vakitlerin olduğu API sitesi: http://www.namazvakitleri.site/api/index.php
 
 
