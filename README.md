@@ -1,6 +1,10 @@
 # VakitHabercisi
  Ramazan ayına özel ESP8266 vakit habercisi.
 
+
+YouTube Videosu : https://youtu.be/c4QNVc0267s
+
+
 Kaynaklar:
 
 Referans aldığım kod: https://www.devrelerim.com/2023/01/nodemcu-namaz-vakitlerini-cekme.html
