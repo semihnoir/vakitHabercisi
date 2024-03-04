@@ -5,12 +5,13 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 #include <Wire.h>
+#include <WiFiClientSecureBearSSL.h>
 
 const char *ssid = "";     // Wifi SSID
 const char *pwd = "";  // Wifi Şifresi
 String city = "İstanbul";
 String apiUrl = "http://api.aladhan.com/v1/timingsByCity/";
-String dateApi = "http://timeapi.io/api/Time/current/zone?timeZone=Europe/Istanbul";
+String dateApi = "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Istanbul";
 
 String imsak;
 String gunes;
@@ -249,10 +250,10 @@ void loop() {
     // LCD'ye bilgileri yazdır
     Kontrol();
     Vakitler();
-    delay(5000);
+    delay(3000);
     Kontrol();
     Saat();
-    delay(5000);
+    delay(2000);
   }
 }
 
@@ -328,13 +329,17 @@ void Vakitler() {
 }
 
 String GetDate() {
-  HTTPClient http;
-  http.begin(wfc, dateApi);
+  std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
 
-  int httpCode = http.GET();
+    // Ignore SSL certificate validation
+    client->setInsecure();
+  HTTPClient https;
+  https.begin(*client, dateApi);
+
+  int httpCode = https.GET();
 
   if (httpCode > 0) {
-    String payload = http.getString();
+    String payload = https.getString();
     Serial.println("API Response: " + payload);
 
     // JSON verisini ayrıştır
@@ -345,15 +350,14 @@ String GetDate() {
       return "";
     }
 
-    String date = (const char *)(jsonData[date]);
-    Serial.println("Tarih: " + date);
+    String date = (const char *)(jsonData["date"]);
     return date;
   } else {
     Serial.println("HTTP Bağlantı Hatası");
     return "";
   }
 
-  http.end();
+  https.end();
 }
 
 String formatDateString(String originalDate) {
@@ -362,20 +366,22 @@ String formatDateString(String originalDate) {
   int secondSlashIndex = originalDate.indexOf('/', firstSlashIndex + 1);
 
   // Gün, ay ve yılı ayır
-  String day = originalDate.substring(0, firstSlashIndex);
-  String month = originalDate.substring(firstSlashIndex + 1, secondSlashIndex);
+  String day = originalDate.substring(firstSlashIndex + 1, secondSlashIndex);
+  String month = originalDate.substring(0, firstSlashIndex);
   String year = originalDate.substring(secondSlashIndex + 1);
 
   // Yeni formatta tarihi oluştur
   String formattedDate = day + "-" + month + "-" + year;
-
+  Serial.println("Tarih: " + formattedDate);
   return formattedDate;
 }
 
 String GetPrayerTime(String prayer) {
   // API'ye istek yap
   HTTPClient http;
-  http.begin(wfc, apiUrl + formatDateString(GetDate()) + "?city=" + city + "&country=Turkey&method=8");
+  String date = GetDate();
+  String fDate = formatDateString(date);
+  http.begin(wfc, apiUrl + fDate + "?city=" + city + "&country=Turkey&method=8");
 
   int httpCode = http.GET();
 
